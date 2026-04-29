@@ -1,0 +1,38 @@
+{
+  "name": "ms-historia-clinica",
+  "version": "0.0.1",
+  "description": "Microservicio para gestion de historias clinicas veterinarias y adjuntos medicos",
+  "author": "",
+  "private": true,
+  "license": "UNLICENSED",
+  "scripts": {
+    "build": "nest build",
+    "start": "node dist/main.js",
+    "start:dev": "nest start --watch",
+    "start:prod": "node dist/main.js",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate:dev": "prisma migrate dev",
+    "prisma:migrate:deploy": "prisma migrate deploy",
+    "prisma:seed": "node prisma/seed.js"
+  },
+  "dependencies": {
+    "@nestjs/common": "^11.0.1",
+    "@nestjs/core": "^11.0.1",
+    "@nestjs/mapped-types": "^2.1.0",
+    "@nestjs/platform-express": "^11.1.19",
+    "@prisma/client": "^6.8.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.15.1",
+    "multer": "^2.1.1",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.1"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^11.0.0",
+    "@types/node": "^24.0.0",
+    "dotenv": "^17.4.2",
+    "@types/multer": "^2.1.0",
+    "prisma": "^6.8.0",
+    "typescript": "^5.7.3"
+  }
+}

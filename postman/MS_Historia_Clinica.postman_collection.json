@@ -1,0 +1,351 @@
+{
+  "info": {
+    "_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "name": "MS Historia Clínica",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Colección Postman para probar el microservicio MS Historia Clínica. Requiere que MS Entidades Core esté corriendo (por defecto en http://host.docker.internal:3001/api/v1 si Docker, o http://localhost:3001/api/v1 si local)."
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3005/api/v1"
+    },
+    {
+      "key": "msEntidadesUrl",
+      "value": "http://localhost:3001/api/v1"
+    },
+    {
+      "key": "msAgendaUrl",
+      "value": "http://localhost:3003/api/v1"
+    }
+  ],
+  "item": [
+    {
+      "name": "?? Historia Clínica",
+      "description": "Gestión de historias Clínicas (CRUD). Requiere pacienteId y sucursalId (obtenidos de ms-entidades).",
+      "item": [
+        {
+          "name": "Listar historias Clínicas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/historia-clinica",
+              "host": ["{{baseUrl}}"],
+              "path": ["historia-clinica"]
+            }
+          }
+        },
+        {
+          "name": "Listar historias - filtro por paciente",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/historia-clinica?pacienteId=1",
+              "host": ["{{baseUrl}}"],
+              "path": ["historia-clinica"],
+              "query": [{ "key": "pacienteId", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Listar historias - filtro por sucursal",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/historia-clinica?sucursalId=1",
+              "host": ["{{baseUrl}}"],
+              "path": ["historia-clinica"],
+              "query": [{ "key": "sucursalId", "value": "1" }]
+            }
+          }
+        },
+        {
+          "name": "Listar historias - filtro por pago",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/historia-clinica?pagado=true",
+              "host": ["{{baseUrl}}"],
+              "path": ["historia-clinica"],
+              "query": [{ "key": "pagado", "value": "true" }]
+            }
+          }
+        },
+        {
+          "name": "Listar historias - rango de fechas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/historia-clinica?desde=2026-04-01T00:00:00&hasta=2026-04-30T23:59:59",
+              "host": ["{{baseUrl}}"],
+              "path": ["historia-clinica"],
+              "query": [
+                { "key": "desde", "value": "2026-04-01T00:00:00" },
+                { "key": "hasta", "value": "2026-04-30T23:59:59" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Obtener historia por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/historia-clinica/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["historia-clinica", "1"]
+            }
+          }
+        },
+        {
+          "name": "Crear historia Clínica",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fecha\": \"2026-05-20T10:30:00\",\n  \"pacienteId\": 1,\n  \"sucursalId\": 1,\n  \"motivo\": \"Revisión general anual\",\n  \"sintomas\": \"Sin síntomas aparentes\",\n  \"diagnostico\": \"Paciente sano\",\n  \"tratamiento\": \"Desparasitación interna y externa\",\n  \"notas\": \"Próxima vacuna en 3 meses\",\n  \"costo\": 85000,\n  \"pagado\": true,\n  \"formaPago\": \"Efectivo\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/historia-clinica",
+              "host": ["{{baseUrl}}"],
+              "path": ["historia-clinica"]
+            }
+          }
+        },
+        {
+          "name": "Actualizar historia (PATCH)",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"diagnostico\": \"Paciente sano - revisión completada\",\n  \"notas\": \"Se le recomienda dieta balanceada\",\n  \"pagado\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/historia-clinica/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["historia-clinica", "1"]
+            }
+          }
+        },
+        {
+          "name": "Reemplazar historia completa (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fecha\": \"2026-05-20T10:30:00\",\n  \"pacienteId\": 1,\n  \"sucursalId\": 1,\n  \"motivo\": \"Control general\",\n  \"sintomas\": \"Buen estado general\",\n  \"diagnostico\": \"Saludable\",\n  \"tratamiento\": \"Vitaminas\",\n  \"costo\": 50000,\n  \"pagado\": false,\n  \"formaPago\": \"Tarjeta\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/historia-clinica/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["historia-clinica", "1"]
+            }
+          }
+        },
+        {
+          "name": "Eliminar historia (soft delete)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/historia-clinica/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["historia-clinica", "1"]
+            }
+          }
+        },
+        {
+          "name": "Obtener ficha completa de paciente",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/historia-clinica/ficha/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["historia-clinica", "ficha", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "?? Adjuntos",
+      "description": "Gestión de archivos adjuntos (imágenes, documentos). Se pueden asociar a un paciente (genérico) o a una historia Clínica específica. El backend obtiene automáticamente el clienteId desde ms-entidades.\n\nIMPORTANTE: Los requests de subida usan form-data con campo 'files' (múltiple). En Postman, selecciona 'File' para cada entrada 'files'.",
+      "item": [
+        {
+          "name": "Subir adjuntos a PACIENTE",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "files",
+                  "type": "file",
+                  "src": ""
+                },
+                {
+                  "key": "descripcion",
+                  "type": "text",
+                  "value": "Fotos de la consulta del 28/04"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/adjuntos/paciente/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["adjuntos", "paciente", "1"]
+            }
+          }
+        },
+        {
+          "name": "Subir adjuntos a HISTORIA Clínica",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "files",
+                  "type": "file",
+                  "src": ""
+                },
+                {
+                  "key": "descripcion",
+                  "type": "text",
+                  "value": "Radiografía de la pata trasera"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/adjuntos/historia/15",
+              "host": ["{{baseUrl}}"],
+              "path": ["adjuntos", "historia", "15"]
+            }
+          }
+        },
+        {
+          "name": "Listar adjuntos del paciente",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/adjuntos/paciente/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["adjuntos", "paciente", "1"]
+            }
+          }
+        },
+        {
+          "name": "Listar adjuntos de una historia",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/adjuntos/historia/15",
+              "host": ["{{baseUrl}}"],
+              "path": ["adjuntos", "historia", "15"]
+            }
+          }
+        },
+        {
+          "name": "Obtener adjunto por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/adjuntos/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["adjuntos", "1"]
+            }
+          }
+        },
+        {
+          "name": "Eliminar adjunto",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/adjuntos/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["adjuntos", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "?? Agenda (Proxy)",
+      "description": "Endpoints que consultan el microservicio MS Agenda. Requiere ms-agenda corriendo en {{msAgendaUrl}} (por defecto http://localhost:3003/api/v1).",
+      "item": [
+        {
+          "name": "Obtener citas del paciente",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/agenda/paciente/1/citas",
+              "host": ["{{baseUrl}}"],
+              "path": ["agenda", "paciente", "1", "citas"]
+            }
+          }
+        },
+        {
+          "name": "Obtener recordatorios del paciente",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/agenda/paciente/1/recordatorios",
+              "host": ["{{baseUrl}}"],
+              "path": ["agenda", "paciente", "1", "recordatorios"]
+            }
+          }
+        },
+        {
+          "name": "Crear cita (envía a ms-agenda)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fecha\": \"2026-05-20T10:30:00\",\n  \"motivo\": \"Control post operatorio\",\n  \"tipo\": \"Consulta\",\n  \"pacienteId\": 1,\n  \"usuarioId\": 2\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/agenda/citas",
+              "host": ["{{baseUrl}}"],
+              "path": ["agenda", "citas"]
+            }
+          }
+        },
+        {
+          "name": "Crear recordatorio (envía a ms-agenda)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"motivo\": \"Recordar vacunación anual\",\n  \"tipo\": \"Vacunación\",\n  \"fechaDesde\": \"2026-05-18T08:00:00\",\n  \"fechaHasta\": \"2026-05-20T08:00:00\",\n  \"pacienteId\": 1,\n  \"usuarioId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/agenda/recordatorios",
+              "host": ["{{baseUrl}}"],
+              "path": ["agenda", "recordatorios"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

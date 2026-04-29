@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model HistoriaClinica {
+  id                Int       @id @default(autoincrement())
+  fecha             DateTime
+  pacienteId        Int
+  sucursalId        Int
+  motivo            String    @db.VarChar(500)
+  sintomas          String?   @db.VarChar(1000)
+  diagnostico       String?   @db.VarChar(1000)
+  tratamiento       String?   @db.VarChar(1000)
+  notas             String?   @db.VarChar(1000)
+  costo             Decimal?  @db.Decimal(10, 2)
+  pagado            Boolean   @default(false)
+  formaPago         String?   @db.VarChar(50)
+  eliminado         Boolean   @default(false)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  adjuntos          Adjunto[]
+
+  @@map("historias_clinicas")
+}
+
+model Adjunto {
+  id                Int              @id @default(autoincrement())
+  pacienteId        Int
+  clienteId         Int
+  historiaClinicaId Int?
+  nombreArchivo     String           @db.VarChar(500)
+  nombreOriginal    String           @db.VarChar(500)
+  mimeType          String           @db.VarChar(100)
+  size              Int
+  url               String           @db.VarChar(500)
+  descripcion       String?          @db.VarChar(300)
+  eliminado         Boolean          @default(false)
+  createdAt         DateTime         @default(now())
+  historiaClinica   HistoriaClinica? @relation(fields: [historiaClinicaId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+
+  @@map("adjuntos")
+}
