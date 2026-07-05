@@ -10,17 +10,18 @@ import {
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
+import { ApiOperation, ApiTags } from '@nestjs/swagger'; // 👈 Importación de Swagger
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { AdjuntosService } from './adjuntos.service';
 import { multerConfig, MAX_FILES } from './multer.config';
 
+@ApiTags('Archivos y Adjuntos Clínicos') // 👈 Agrupador para la UI
 @Controller('adjuntos')
 export class AdjuntosController {
   constructor(private readonly service: AdjuntosService) {}
 
-  // POST /api/v1/adjuntos/paciente/:pacienteId
-  // form-data: files[] (imágenes), descripcion? (texto)
   @Post('paciente/:pacienteId')
+  @ApiOperation({ summary: 'Subir y asociar múltiples archivos o imágenes directamente al expediente del paciente' })
   @UseInterceptors(FilesInterceptor('files', MAX_FILES, multerConfig))
   uploadPorPaciente(
     @Param('pacienteId', ParseIntPipe) pacienteId: number,
@@ -32,9 +33,8 @@ export class AdjuntosController {
     return this.service.uploadPorPaciente(pacienteId, files, descripcion);
   }
 
-  // POST /api/v1/adjuntos/historia/:historiaClinicaId
-  // form-data: files[] (imágenes), descripcion? (texto)
   @Post('historia/:historiaClinicaId')
+  @ApiOperation({ summary: 'Vincular archivos adjuntos a una evolución o registro específico de la historia clínica' })
   @UseInterceptors(FilesInterceptor('files', MAX_FILES, multerConfig))
   uploadPorHistoria(
     @Param('historiaClinicaId', ParseIntPipe) historiaClinicaId: number,
@@ -46,28 +46,28 @@ export class AdjuntosController {
     return this.service.uploadPorHistoria(historiaClinicaId, files, descripcion);
   }
 
-  // GET /api/v1/adjuntos/paciente/:pacienteId
   @Get('paciente/:pacienteId')
+  @ApiOperation({ summary: 'Consultar la galería completa de archivos adjuntos de un paciente' })
   galeriaPorPaciente(@Param('pacienteId', ParseIntPipe) pacienteId: number) {
     return this.service.galeriaPorPaciente(pacienteId);
   }
 
-  // GET /api/v1/adjuntos/historia/:historiaClinicaId
   @Get('historia/:historiaClinicaId')
+  @ApiOperation({ summary: 'Obtener los archivos adjuntos vinculados a una consulta médica específica' })
   galeriaPorHistoria(
     @Param('historiaClinicaId', ParseIntPipe) historiaClinicaId: number,
   ) {
     return this.service.galeriaPorHistoria(historiaClinicaId);
   }
 
-  // GET /api/v1/adjuntos/:id
   @Get(':id')
+  @ApiOperation({ summary: 'Obtener los metadatos de un archivo adjunto específico por su ID' })
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.service.findOne(id);
   }
 
-  // DELETE /api/v1/adjuntos/:id
   @Delete(':id')
+  @ApiOperation({ summary: 'Eliminar un archivo adjunto del expediente de forma permanente' })
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.service.remove(id);
   }
