@@ -15,7 +15,7 @@ services:
       timeout: 5s
       retries: 10
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_historia_data:/var/lib/postgresql/data # Nombre de volumen único
     networks:
       - ms-historia-net
 
@@ -31,19 +31,20 @@ services:
     environment:
       NODE_ENV: development
       PORT: ${PORT}
-      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}?schema=public
+      # Apunta explícitamente a ms-historia-db por seguridad DNS interna
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@ms-historia-db:5432/${POSTGRES_DB}?schema=public
       MS_ENTIDADES_URL: ${MS_ENTIDADES_URL}
       MS_AGENDA_URL: ${MS_AGENDA_URL}
     ports:
       - "${PORT}:${PORT}"
     volumes:
-      - uploads_data:/app/uploads
+      - uploads_historia_data:/app/uploads # Nombre de volumen único
     networks:
       - ms-historia-net
 
 volumes:
-  postgres_data:
-  uploads_data:
+  postgres_historia_data:
+  uploads_historia_data:
 
 networks:
   ms-historia-net:
